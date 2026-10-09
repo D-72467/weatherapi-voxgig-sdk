@@ -18,7 +18,7 @@ The workflow downloads the upstream OpenAPI 3 specification, normalises one inva
 
 **Initial attempt:** [failed run #37916460858](https://github.com/D-72467/weatherapi-voxgig-sdk/actions/runs/37916460858)
 - OpenAPI download: **passed**.
-- Scaffold and TypeScript SDK generation: **passed** (13 API entities/endpoints identified).
+- Scaffold and TypeScript SDK generation: **passed** (13 generated API entities/operations).
 - TypeScript compilation: **passed**.
 - Generated offline tests: **268 passed, 1 failed, 21 skipped** (290 tests in 51 suites).
 - Failure: `bulk.create POST /current.json#bulk` — `credential not sent as the definition declares it` (expected query parameter `key`).
@@ -32,7 +32,7 @@ The workflow downloads the upstream OpenAPI 3 specification, normalises one inva
 - Rebuilt generated SDK and ran `scripts/live-smoke.cjs` with a WeatherAPI key supplied via a GitHub Actions secret.
 - Called `WeatherapiSDK.Current().load({ key, q: 'London' })` through the generated client, using the real WeatherAPI service (rather than the offline test transport).
 - The request completed without throwing; `entity.data()` yielded an object and the workflow printed `LIVE_SDK_REQUEST: PASS (authenticated response received and parsed)`.
-- **Scope:** This is a successful live-request smoke test, but the test does **not** assert the HTTP status, expected location name, temperature value, or response-schema shape. It does not exercise other endpoints or invalid-key handling. Those remain unverified.
+- **Scope of this first smoke run only:** It did not assert the HTTP status or weather fields. A later, separately linked expanded live suite exercised additional endpoints, response fields, and an invalid-key scenario.
 
 
 **Expanded live integration test:** [successful run #37919174589](https://github.com/D-72467/weatherapi-voxgig-sdk/actions/runs/37919174589)
@@ -56,7 +56,7 @@ To verify this, a standard URL parser applied to `.../current.json#bulk?key=exam
 - The official scaffolder and generator were straightforward to automate once the OpenAPI definition was available.
 - Offline tests run without a WeatherAPI key, which made it possible to check many operations quickly.
 - The initial failed workflow still uploaded a generated-code artifact, useful for inspecting source and test failures.
-- The generated TypeScript package metadata and README contain default upstream catalogue links such as `https://github.com/voxgig-sdk/weatherapi-sdk`, which do not point to this contributor-owned repository. They would need adjusting through the project model before packaging/publishing this as a standalone npm package.
+- The generated TypeScript package metadata and generated README retain template defaults pointing to `https://github.com/voxgig-sdk/weatherapi-sdk` instead of this contributor-owned repository. The root README links to the correct repository; generated defaults are intentionally left as evidence and should be corrected via the project model before any npm release.
 - Generated tests include optional/feature-gated skips. The 21 skipped tests should not be presented as passes.
 
 ## Limits and follow-up
@@ -68,7 +68,7 @@ To verify this, a standard URL parser applied to `.../current.json#bulk?key=exam
 
 ## Human-work time
 
-**Human duration not independently measured.** The candidate should enter only actual time spent reviewing, configuring access and the results. GitHub job durations and commit timestamps demonstrate machine events, **not** human work time. The mini-task was designed to respect Voxgig's 30-minute human-work limit, but this report does not claim proof that the total was below the limit.
+**Candidate-reported active-work window:** approximately **11:14–11:42 AM BST, 9 October 2026 (about 28 minutes)**. The first commit was at **11:14:16 AM BST** and the expanded live checks finished at approximately **11:41:57 AM BST**. The candidate reported starting the hands-on work around the first commit. AI assistance and GitHub Actions automation were used, as permitted by the task. This is an **estimate based on candidate-reported work time** with commit/run timestamps corroborating milestones, not an independent measurement of active human minutes. Subsequent report and administrative updates happened later and are excluded from that initial estimate.
 
 ## Assessment use
 
