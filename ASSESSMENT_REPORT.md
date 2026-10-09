@@ -28,6 +28,13 @@ The workflow downloads the upstream OpenAPI 3 specification, normalises one inva
 - Generated offline tests: **269 passed, 0 failed, 21 skipped** (290 tests in 51 suites).
 - Generated TypeScript SDK committed under `generated/weatherapi/`.
 
+**Live authenticated smoke test:** [successful run #37918523974](https://github.com/D-72467/weatherapi-voxgig-sdk/actions/runs/37918523974)
+- Rebuilt generated SDK and ran `scripts/live-smoke.cjs` with a WeatherAPI key supplied via a GitHub Actions secret.
+- Called `WeatherapiSDK.Current().load({ key, q: 'London' })` through the generated client, using the real WeatherAPI service (rather than the offline test transport).
+- The request completed without throwing; `entity.data()` yielded an object and the workflow printed `LIVE_SDK_REQUEST: PASS (authenticated response received and parsed)`.
+- **Scope:** This is a successful live-request smoke test, but the test does **not** assert the HTTP status, expected location name, temperature value, or response-schema shape. It does not exercise other endpoints or invalid-key handling. Those remain unverified.
+
+
 ## Issue found: fragment in an OpenAPI path
 
 The source definition used `/current.json#bulk` as an API path for a POST operation. The generator treated that full string as a request path. When an API key and other parameters were appended to the URL, they appeared after the `#` fragment marker rather than in the URL query. As a result, the test did not observe the declared `key` query credential.
@@ -48,7 +55,7 @@ To verify this, a standard URL parser applied to `.../current.json#bulk?key=exam
 
 ## Limits and follow-up
 
-- **Live authenticated requests were not tested.** A WeatherAPI key was not provided, so results are limited to generated TypeScript compilation and offline/mock tests.
+- A **live current-weather SDK request** succeeded using a GitHub Actions secret. The smoke test only checked that it returned an object; it did not validate individual weather fields or negative/error cases.
 - No npm package was published; repository publication is source-only.
 - WeatherAPI subscription tier limitations were not validated.
 - A full review of every generated operation against the upstream service is still needed for production use.
