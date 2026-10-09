@@ -2,6 +2,10 @@ name: Live SDK smoke test
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/live-smoke.yml
+      - scripts/live-validation.cjs
 
 permissions:
   contents: read
