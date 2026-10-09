@@ -1,0 +1,27 @@
+name: Live SDK smoke test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install generated SDK dependencies
+        working-directory: generated/weatherapi/ts
+        run: npm install --no-audit --no-fund
+      - name: Build generated SDK
+        working-directory: generated/weatherapi/ts
+        run: npm run build
+      - name: Live authenticated call via generated SDK
+        env:
+          WEATHERAPI_APIKEY: ${{ secrets.WEATHERAPI_APIKEY }}
+        run: node scripts/live-smoke.cjs
