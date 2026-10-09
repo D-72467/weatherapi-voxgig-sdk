@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - .github/workflows/generate-sdk.yml
+      - scripts/normalise-openapi.mjs
   workflow_dispatch:
 
 permissions:
@@ -22,10 +23,13 @@ jobs:
         run: |
           curl --fail --location --show-error --retry 2 https://www.weatherapi.com/openapi.json -o openapi.json
           node -e 'const x=require("./openapi.json");if(!x.openapi||!x.paths)process.exit(1);console.log(x.openapi,Object.keys(x.paths).length)'
+      - name: Normalise upstream fragment pseudo-route
+        run: node scripts/normalise-openapi.mjs
       - name: Scaffold using Voxgig create-sdkgen
         run: |
           npm create --yes @voxgig/sdkgen@latest -- weatherapi -d "$GITHUB_WORKSPACE/openapi.json" -o "$GITHUB_WORKSPACE/generated/weatherapi" -t ts -f test
       - name: Generate TypeScript SDK
+        id: sdkgen
         working-directory: generated/weatherapi/.sdk
         run: npm run generate
       - name: Build and run generated offline tests
@@ -34,14 +38,14 @@ jobs:
           npm install --no-audit --no-fund
           npm run build
           npm test
-      - name: Commit verified generated SDK
-        if: success()
+      - name: Commit generated SDK with verification status
+        if: always() && steps.sdkgen.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add generated/weatherapi
+          git add -f generated/weatherapi
           if ! git diff --cached --quiet; then
-            git commit -m "Generate WeatherAPI TypeScript SDK with Voxgig"
+            git commit -m "Generate WeatherAPI TypeScript SDK with Voxgig and record test results"
             git push
           fi
       - uses: actions/upload-artifact@v4
