@@ -1,0 +1,10 @@
+# Do not commit credentials or dependencies
+.env
+.env.*
+!.env.example
+**/node_modules/
+**/coverage/
+**/.cache/
+openapi.json
+api-key.txt
+*.log
