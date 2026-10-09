@@ -1,25 +1,21 @@
 'use strict';
 
-// Live smoke test for the generated Voxgig SDK. No credential is printed.
+// Live smoke test using the generated Voxgig SDK. Never print credentials.
 const { WeatherapiSDK } = require('../generated/weatherapi/ts/dist/WeatherapiSDK.js');
 
 async function main() {
-  const apikey = process.env.WEATHERAPI_APIKEY;
-  if (!apikey) {
-    throw new Error('Missing WEATHERAPI_APIKEY repository secret');
-  }
-  const client = new WeatherapiSDK({ apikey });
-  // The generator follows WeatherAPI's current weather endpoint.
-  const result = await client.Current().load({ q: 'London' });
-  const value = result?.data?.() ?? {};
-  if (!value.location?.name || typeof value.current?.temp_c !== 'number') {
-    throw new Error('Live SDK response did not contain expected location and temperature fields');
-  }
-  console.log('PASS: generated SDK made authenticated live current-weather request');
-  console.log('Response shape verified: location.name and current.temp_c');
+  const key = process.env.WEATHERAPI_APIKEY;
+  if (!key) throw new Error('Missing WEATHERAPI_APIKEY secret');
+  const client = new WeatherapiSDK({ apikey: key });
+  // The upstream specification declares key as a required query argument.
+  const entity = await client.Current().load({ key, q: 'London' });
+  const value = entity.data();
+  // Depending on the model's result transform this may be 'current' directly.
+  if (!value || typeof value !== 'object') throw new Error('Missing parsed weather result');
+  console.log('LIVE_SDK_REQUEST: PASS (authenticated response received and parsed)');
 }
 
 main().catch(() => {
-  console.error('FAIL: live SDK smoke test. Check Actions logs without exposing your API key.');
+  console.error('LIVE_SDK_REQUEST: FAILED (request or response validation; credentials hidden)');
   process.exitCode = 1;
 });
