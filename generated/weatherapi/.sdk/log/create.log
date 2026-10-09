@@ -1,0 +1,1 @@
+[2026-10-09T10:22:01.536Z]  UTC=2026-10-09T10:22:01.536  CREATE  /opt/hostedtoolcache/node/24.21.0/x64/bin/node ~/.npm/_npx/08611a440653ef14/node_modules/.bin/create-sdkgen weatherapi -d ~/work/weatherapi-voxgig-sdk/weatherapi-voxgig-sdk/openapi.json -o ~/work/weatherapi-voxgig-sdk/weatherapi-voxgig-sdk/generated/weatherapi -t ts -f test

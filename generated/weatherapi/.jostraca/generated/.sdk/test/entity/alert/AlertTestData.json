@@ -1,0 +1,36 @@
+{
+  "existing": {
+    "alert": {
+      "ALERT00": {
+        "alerts": {},
+        "location": {},
+        "id": "ALERT00"
+      },
+      "ALERT01": {
+        "alerts": {},
+        "location": {},
+        "id": "ALERT01"
+      },
+      "ALERT02": {
+        "alerts": {},
+        "location": {},
+        "id": "ALERT02"
+      }
+    }
+  },
+  "new": {
+    "alert": {
+      "alert_ref01": {
+        "alerts": {},
+        "location": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /alerts.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

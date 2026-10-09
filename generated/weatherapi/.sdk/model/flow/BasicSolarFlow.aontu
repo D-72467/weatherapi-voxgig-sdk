@@ -1,0 +1,28 @@
+# BasicSolarFlow
+
+main: kit: flow: BasicSolarFlow:
+{
+  entity: "solar",
+  kind: "basic",
+  name: "BasicSolarFlow",
+  step: [
+    {
+      i: {
+        ref: "solar_ref01",
+        srcdatavar: "solar_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-solar_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSolarFlow"
+}

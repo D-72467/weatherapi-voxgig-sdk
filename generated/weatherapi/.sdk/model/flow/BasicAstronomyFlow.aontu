@@ -1,0 +1,28 @@
+# BasicAstronomyFlow
+
+main: kit: flow: BasicAstronomyFlow:
+{
+  entity: "astronomy",
+  kind: "basic",
+  name: "BasicAstronomyFlow",
+  step: [
+    {
+      i: {
+        ref: "astronomy_ref01",
+        srcdatavar: "astronomy_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-astronomy_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicAstronomyFlow"
+}

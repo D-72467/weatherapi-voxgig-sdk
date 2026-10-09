@@ -1,0 +1,36 @@
+{
+  "existing": {
+    "marine": {
+      "MARINE00": {
+        "forecast": {},
+        "location": {},
+        "id": "MARINE00"
+      },
+      "MARINE01": {
+        "forecast": {},
+        "location": {},
+        "id": "MARINE01"
+      },
+      "MARINE02": {
+        "forecast": {},
+        "location": {},
+        "id": "MARINE02"
+      }
+    }
+  },
+  "new": {
+    "marine": {
+      "marine_ref01": {
+        "forecast": {},
+        "location": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /marine.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

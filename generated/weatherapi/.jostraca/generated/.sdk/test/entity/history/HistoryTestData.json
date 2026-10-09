@@ -1,0 +1,44 @@
+{
+  "existing": {
+    "history": {
+      "HISTORY00": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "HISTORY00"
+      },
+      "HISTORY01": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "HISTORY01"
+      },
+      "HISTORY02": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "HISTORY02"
+      }
+    }
+  },
+  "new": {
+    "history": {
+      "history_ref01": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /history.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

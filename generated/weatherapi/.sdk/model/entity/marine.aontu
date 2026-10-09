@@ -1,0 +1,111 @@
+# Entity: marine
+
+main: kit: entity: marine: {
+
+  alias: field: {}
+
+  fields: {
+    forecast: {
+      h: "Forecast"
+      n: "forecast"
+      r: false
+      t: "`$OBJECT`"
+    }
+    location: {
+      h: "Location"
+      n: "location"
+      r: false
+      sh: "Location metadata returned with every weather response."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "marine"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /marine.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "day"
+                or: "days"
+                r: true
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "dt"
+                or: "dt"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "hour"
+                or: "hour"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "London"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "tide"
+                or: "tides"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/marine.json"
+          q: {
+            exist: [
+              "day"
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "marine.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

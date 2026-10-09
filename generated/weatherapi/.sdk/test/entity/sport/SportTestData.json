@@ -1,0 +1,37 @@
+{
+  "existing": {
+    "sport": {
+      "SPORT00": {
+        "cricket": [],
+        "football": [],
+        "golf": []
+      },
+      "SPORT01": {
+        "cricket": [],
+        "football": [],
+        "golf": []
+      },
+      "SPORT02": {
+        "cricket": [],
+        "football": [],
+        "golf": []
+      }
+    }
+  },
+  "new": {
+    "sport": {
+      "sport_ref01": {
+        "cricket": [],
+        "football": [],
+        "golf": []
+      }
+    }
+  },
+  "requests": {
+    "GET /sports.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "existing": {
+    "timezone": {
+      "TIMEZONE00": {
+        "country": "s50",
+        "lat": 81,
+        "localtime": "s52",
+        "localtime_epoch": 83,
+        "lon": 84,
+        "name": "s55",
+        "region": "s56",
+        "tz_id": "TZ01",
+        "id": "TIMEZONE00"
+      },
+      "TIMEZONE01": {
+        "country": "sa0",
+        "lat": 161,
+        "localtime": "sa2",
+        "localtime_epoch": 163,
+        "lon": 164,
+        "name": "sa5",
+        "region": "sa6",
+        "tz_id": "TZ01",
+        "id": "TIMEZONE01"
+      },
+      "TIMEZONE02": {
+        "country": "sf0",
+        "lat": 241,
+        "localtime": "sf2",
+        "localtime_epoch": 243,
+        "lon": 244,
+        "name": "sf5",
+        "region": "sf6",
+        "tz_id": "TZ01",
+        "id": "TIMEZONE02"
+      }
+    }
+  },
+  "new": {
+    "timezone": {
+      "timezone_ref01": {
+        "country": "s140",
+        "lat": 321,
+        "localtime": "s142",
+        "localtime_epoch": 323,
+        "lon": 324,
+        "name": "s145",
+        "region": "s146",
+        "tz_id": "TZ01"
+      }
+    }
+  },
+  "requests": {
+    "GET /timezone.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

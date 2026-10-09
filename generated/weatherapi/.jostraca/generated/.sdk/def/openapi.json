@@ -1,0 +1,2334 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "WeatherAPI.com",
+    "description": "WeatherAPI.com provides real-time, forecast, historical, marine, future, solar PV energy, astronomy, air quality, pollen, sports, IP lookup, timezone, and geolocation data via a JSON/XML REST API. Trusted by 1M+ users worldwide. Average response time ~200ms.\n\n## Authentication\nAll endpoints require an API key passed as the `key` query parameter.\n\n## Base URL\n`https://api.weatherapi.com/v1`\n\n## Location Query (`q` parameter)\nAccepts: city name, lat/lon decimal, US zip, UK postcode, Canada postal code, METAR code (`metar:EGLL`), IATA airport code (`iata:DXB`), IP lookup (`auto:ip`), IPv4/IPv6 address, or location ID (`id:2801268`).\n\n## Plans\n- **Free**: 100K calls/month, 3-day forecast, 1-day history\n- **Starter**: $7/mo — 3M calls, 7-day forecast, 7-day history\n- **Pro+**: $25/mo — 5M calls, 300-day future, 365-day history\n- **Business**: $65/mo — 10M calls, evapotranspiration\n- **Enterprise**: Custom — 15-min interval, pollen history, wind@100m, SLA",
+    "version": "1.0.3",
+    "contact": {
+      "name": "WeatherAPI.com Support",
+      "url": "https://www.weatherapi.com/contact.aspx"
+    },
+    "license": {
+      "name": "Commercial / Non-Commercial",
+      "url": "https://www.weatherapi.com/terms.aspx"
+    },
+    "x-logo": {
+      "url": "https://cdn.weatherapi.com/v4/images/weatherapi_logo.png"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.weatherapi.com/v1",
+      "description": "Production (HTTPS)"
+    },
+    {
+      "url": "http://api.weatherapi.com/v1",
+      "description": "Production (HTTP)"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Weather",
+      "description": "Real-time and forecast weather endpoints"
+    },
+    {
+      "name": "History",
+      "description": "Historical weather data"
+    },
+    {
+      "name": "Marine",
+      "description": "Marine and sailing weather"
+    },
+    {
+      "name": "Future",
+      "description": "Long-range future weather (14–300 days)"
+    },
+    {
+      "name": "Solar",
+      "description": "Solar PV energy forecast"
+    },
+    {
+      "name": "Geo",
+      "description": "Location, IP lookup, timezone, astronomy"
+    },
+    {
+      "name": "Sports",
+      "description": "Upcoming sports events"
+    },
+    {
+      "name": "Alerts",
+      "description": "Government weather alerts"
+    }
+  ],
+  "paths": {
+    "/current.json": {
+      "get": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "Current / Real-time Weather",
+        "description": "Returns up-to-date current weather for a given location. Data is refreshed every 10–15 minutes. Optionally includes air quality (AQI) and pollen data.",
+        "operationId": "getCurrentWeather",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          },
+          {
+            "$ref": "#/components/parameters/aqi"
+          },
+          {
+            "$ref": "#/components/parameters/pollen"
+          },
+          {
+            "$ref": "#/components/parameters/lang"
+          },
+          {
+            "$ref": "#/components/parameters/current_fields"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current weather data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentWeatherResponse"
+                },
+                "example": {
+                  "location": {
+                    "name": "London",
+                    "region": "City of London, Greater London",
+                    "country": "United Kingdom",
+                    "lat": 51.52,
+                    "lon": -0.11,
+                    "tz_id": "Europe/London",
+                    "localtime_epoch": 1613896955,
+                    "localtime": "2021-02-21 8:42"
+                  },
+                  "current": {
+                    "last_updated": "2021-02-21 08:30",
+                    "temp_c": 11,
+                    "temp_f": 51.8,
+                    "is_day": 1,
+                    "condition": {
+                      "text": "Partly cloudy",
+                      "icon": "//cdn.weatherapi.com/weather/64x64/day/116.png",
+                      "code": 1003
+                    },
+                    "wind_mph": 3.8,
+                    "wind_kph": 6.1,
+                    "humidity": 82,
+                    "uv": 1
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "Bulk Current Weather",
+        "description": "Retrieve current weather for multiple locations in a single request. Pass `q=bulk` in the query string with a JSON body containing up to 50 locations. Each location counts as 1 call. Available on Pro+, Business, and Enterprise plans.",
+        "operationId": "getBulkCurrentWeather",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "bulk"
+              ]
+            }
+          },
+          {
+            "$ref": "#/components/parameters/aqi"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkRequest"
+              },
+              "example": {
+                "locations": [
+                  {
+                    "q": "London",
+                    "custom_id": "loc-1"
+                  },
+                  {
+                    "q": "48.8567,2.3508",
+                    "custom_id": "paris"
+                  },
+                  {
+                    "q": "90210",
+                    "custom_id": "beverly-hills"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bulk weather results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/forecast.json": {
+      "get": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "Forecast Weather",
+        "description": "Returns weather forecast for up to 14 days (plan dependent). Includes hourly intervals, astronomy, air quality, pollen, and weather alerts.",
+        "operationId": "getForecast",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": true,
+            "description": "Number of forecast days (1–14).",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 14,
+              "example": 3
+            }
+          },
+          {
+            "$ref": "#/components/parameters/dt"
+          },
+          {
+            "$ref": "#/components/parameters/unixdt"
+          },
+          {
+            "$ref": "#/components/parameters/hour"
+          },
+          {
+            "$ref": "#/components/parameters/alerts"
+          },
+          {
+            "$ref": "#/components/parameters/aqi"
+          },
+          {
+            "$ref": "#/components/parameters/pollen"
+          },
+          {
+            "$ref": "#/components/parameters/tp"
+          },
+          {
+            "$ref": "#/components/parameters/lang"
+          },
+          {
+            "$ref": "#/components/parameters/day_fields"
+          },
+          {
+            "$ref": "#/components/parameters/hour_fields"
+          },
+          {
+            "$ref": "#/components/parameters/et0"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Forecast weather data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastWeatherResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/history.json": {
+      "get": {
+        "tags": [
+          "History"
+        ],
+        "summary": "Historical Weather",
+        "description": "Returns historical weather data for a given date on or after 1 January 2010. Includes hourly breakdown. Enterprise plan unlocks solar irradiance, wind@100m, pollen history, and evapotranspiration.",
+        "operationId": "getHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          },
+          {
+            "name": "dt",
+            "in": "query",
+            "required": true,
+            "description": "Date on or after 2010-01-01 in yyyy-MM-dd format.",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2023-01-01"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/unixdt"
+          },
+          {
+            "name": "end_dt",
+            "in": "query",
+            "required": false,
+            "description": "End date for range (Pro+ and above). Max 30 days range. yyyy-MM-dd.",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/unixend_dt"
+          },
+          {
+            "$ref": "#/components/parameters/hour"
+          },
+          {
+            "$ref": "#/components/parameters/aqi"
+          },
+          {
+            "$ref": "#/components/parameters/pollen"
+          },
+          {
+            "$ref": "#/components/parameters/tp"
+          },
+          {
+            "$ref": "#/components/parameters/lang"
+          },
+          {
+            "$ref": "#/components/parameters/solar"
+          },
+          {
+            "$ref": "#/components/parameters/et0"
+          },
+          {
+            "$ref": "#/components/parameters/wind100mph"
+          },
+          {
+            "$ref": "#/components/parameters/wind100kph"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical weather data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastWeatherResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/alerts.json": {
+      "get": {
+        "tags": [
+          "Alerts"
+        ],
+        "summary": "Weather Alerts",
+        "description": "Returns government weather alerts and warnings (USA, UK, Europe, rest of world) for a given location, if available.",
+        "operationId": "getAlerts",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Weather alerts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/marine.json": {
+      "get": {
+        "tags": [
+          "Marine"
+        ],
+        "summary": "Marine Weather",
+        "description": "Returns marine and sailing weather forecast (up to 7 days depending on plan) including tide data (Pro+ and above), wave height, swell, and water temperature.",
+        "operationId": "getMarine",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": true,
+            "description": "Number of forecast days (1–7 depending on plan).",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 7
+            }
+          },
+          {
+            "$ref": "#/components/parameters/dt"
+          },
+          {
+            "$ref": "#/components/parameters/hour"
+          },
+          {
+            "name": "tides",
+            "in": "query",
+            "required": false,
+            "description": "Enable/disable tide data (Pro+ and above).",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Marine weather data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarineWeatherResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/future.json": {
+      "get": {
+        "tags": [
+          "Future"
+        ],
+        "summary": "Future Weather (14–300 days ahead)",
+        "description": "Returns 3-hourly weather forecast for a date between 14 days and 300 days in the future. Available on Pro+ plan and above.",
+        "operationId": "getFutureWeather",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          },
+          {
+            "name": "dt",
+            "in": "query",
+            "required": true,
+            "description": "Date between 14 and 300 days from today in yyyy-MM-dd format.",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-06-01"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/lang"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Future weather data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastWeatherResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/solar.json": {
+      "get": {
+        "tags": [
+          "Solar"
+        ],
+        "summary": "Solar PV Energy Forecast",
+        "description": "Returns an hourly and daily power and energy forecast for a solar PV system (up to 14 days; hourly to day 5, 3-hourly after). Available on Business plan and above; keys on other plans get 403 / error 2009. Invalid parameters return 400 with error 1010 (capacity_kw) or 1011 (other solar parameters).",
+        "operationId": "getSolar",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "description": "Number of forecast days (1–14). Default 1.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 14
+            }
+          },
+          {
+            "name": "capacity_kw",
+            "in": "query",
+            "required": true,
+            "description": "Array (DC) size in kWp. Must be greater than 0.",
+            "schema": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "example": 4
+            }
+          },
+          {
+            "name": "tilt",
+            "in": "query",
+            "required": false,
+            "description": "Panel tilt in degrees from horizontal. Default: absolute latitude.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 90
+            }
+          },
+          {
+            "name": "azimuth",
+            "in": "query",
+            "required": false,
+            "description": "Panel azimuth in degrees clockwise from north (180 = south). Default 180 in the northern hemisphere, 0 in the southern.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 360
+            }
+          },
+          {
+            "name": "tracking",
+            "in": "query",
+            "required": false,
+            "description": "Mounting type. Default fixed.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "fixed",
+                "single_axis",
+                "dual_axis"
+              ]
+            }
+          },
+          {
+            "name": "module_type",
+            "in": "query",
+            "required": false,
+            "description": "Module type (sets temperature coefficient). Default standard.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "standard",
+                "premium",
+                "thin_film"
+              ]
+            }
+          },
+          {
+            "name": "losses",
+            "in": "query",
+            "required": false,
+            "description": "System losses in %. Default 14.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 100
+            }
+          },
+          {
+            "name": "inverter_kw",
+            "in": "query",
+            "required": false,
+            "description": "Inverter AC rating in kW. Default capacity_kw / 1.2.",
+            "schema": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          },
+          {
+            "name": "inverter_eff",
+            "in": "query",
+            "required": false,
+            "description": "Inverter efficiency in %. Default 96.",
+            "schema": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "albedo",
+            "in": "query",
+            "required": false,
+            "description": "Ground reflectance. Default 0.2.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Solar PV energy forecast",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolarResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/search.json": {
+      "get": {
+        "tags": [
+          "Geo"
+        ],
+        "summary": "Search / Autocomplete Locations",
+        "description": "Returns matching cities and towns as an array of Location objects. Useful for building autocomplete location pickers.",
+        "operationId": "searchLocations",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "Partial city name, postcode, or coordinates to search.",
+            "schema": {
+              "type": "string",
+              "example": "lond"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of matching locations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SearchLocation"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/ip.json": {
+      "get": {
+        "tags": [
+          "Geo"
+        ],
+        "summary": "IP Lookup",
+        "description": "Returns geolocation and timezone data for a given IPv4 or IPv6 address. Pass `auto:ip` to auto-detect the caller's IP.",
+        "operationId": "ipLookup",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "description": "IPv4, IPv6 address, or `auto:ip` for caller's IP.",
+            "schema": {
+              "type": "string",
+              "example": "auto:ip"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "IP geolocation data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IpLookupResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/timezone.json": {
+      "get": {
+        "tags": [
+          "Geo"
+        ],
+        "summary": "Time Zone",
+        "description": "Returns the local time and timezone information for a given location.",
+        "operationId": "getTimezone",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Timezone data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/astronomy.json": {
+      "get": {
+        "tags": [
+          "Geo"
+        ],
+        "summary": "Astronomy",
+        "description": "Returns sunrise, sunset, moonrise, moonset, moon phase, and moon illumination for a given location and date.",
+        "operationId": "getAstronomy",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          },
+          {
+            "name": "dt",
+            "in": "query",
+            "required": true,
+            "description": "Date in yyyy-MM-dd format.",
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2026-03-20"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Astronomy data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AstronomyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/sports.json": {
+      "get": {
+        "tags": [
+          "Sports"
+        ],
+        "summary": "Sports Events",
+        "description": "Returns upcoming sports events for football (soccer), cricket, and golf. Historical sports data available on Enterprise plan.",
+        "operationId": "getSports",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/key"
+          },
+          {
+            "$ref": "#/components/parameters/q"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sports events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SportsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "key",
+        "description": "API key obtained from https://www.weatherapi.com/my/. Pass as `?key=YOUR_API_KEY` query parameter."
+      }
+    },
+    "parameters": {
+      "key": {
+        "name": "key",
+        "in": "query",
+        "required": true,
+        "description": "Your WeatherAPI.com API key.",
+        "schema": {
+          "type": "string",
+          "example": "YOUR_API_KEY"
+        }
+      },
+      "q": {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Location query. Accepts: city name, lat/lon, US zip, UK postcode, Canada postal code, METAR code (metar:EGLL), IATA (iata:DXB), auto:ip, IPv4/IPv6, or location ID (id:2801268).",
+        "schema": {
+          "type": "string",
+          "example": "London"
+        }
+      },
+      "dt": {
+        "name": "dt",
+        "in": "query",
+        "required": false,
+        "description": "Restrict date output in yyyy-MM-dd format.",
+        "schema": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "unixdt": {
+        "name": "unixdt",
+        "in": "query",
+        "required": false,
+        "description": "Unix timestamp equivalent of `dt`. Do not pass both.",
+        "schema": {
+          "type": "integer",
+          "example": 1490227200
+        }
+      },
+      "unixend_dt": {
+        "name": "unixend_dt",
+        "in": "query",
+        "required": false,
+        "description": "Unix timestamp equivalent of `end_dt`. Do not pass both.",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "hour": {
+        "name": "hour",
+        "in": "query",
+        "required": false,
+        "description": "Restrict output to a specific hour (0–23) in 24-hour format.",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 23
+        }
+      },
+      "alerts": {
+        "name": "alerts",
+        "in": "query",
+        "required": false,
+        "description": "Include weather alerts in Forecast API response.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ],
+          "default": "no"
+        }
+      },
+      "aqi": {
+        "name": "aqi",
+        "in": "query",
+        "required": false,
+        "description": "Include Air Quality Index (AQI) data in response.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ],
+          "default": "no"
+        }
+      },
+      "pollen": {
+        "name": "pollen",
+        "in": "query",
+        "required": false,
+        "description": "Include pollen data. Available on Pro+ and above.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ],
+          "default": "no"
+        }
+      },
+      "tp": {
+        "name": "tp",
+        "in": "query",
+        "required": false,
+        "description": "Interval for data. Use tp=15 for 15-minute intervals (Enterprise only).",
+        "schema": {
+          "type": "integer",
+          "enum": [
+            15
+          ]
+        }
+      },
+      "lang": {
+        "name": "lang",
+        "in": "query",
+        "required": false,
+        "description": "Language code for condition text. E.g.: fr, de, es, zh, ar. See full list in docs.",
+        "schema": {
+          "type": "string",
+          "example": "fr"
+        }
+      },
+      "current_fields": {
+        "name": "current_fields",
+        "in": "query",
+        "required": false,
+        "description": "Comma-separated list of fields to return in the current element, e.g. temp_c,wind_mph.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "day_fields": {
+        "name": "day_fields",
+        "in": "query",
+        "required": false,
+        "description": "Comma-separated fields to return in forecast/history day element.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "hour_fields": {
+        "name": "hour_fields",
+        "in": "query",
+        "required": false,
+        "description": "Comma-separated fields to return in forecast/history hour element.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "solar": {
+        "name": "solar",
+        "in": "query",
+        "required": false,
+        "description": "Include solar irradiance data in History API. Enterprise only.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "et0": {
+        "name": "et0",
+        "in": "query",
+        "required": false,
+        "description": "Include evapotranspiration data. Business and Enterprise only.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "wind100mph": {
+        "name": "wind100mph",
+        "in": "query",
+        "required": false,
+        "description": "Include wind speed at 100m height in mph. Enterprise only.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      "wind100kph": {
+        "name": "wind100kph",
+        "in": "query",
+        "required": false,
+        "description": "Include wind speed at 100m height in kph. Enterprise only.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "yes",
+            "no"
+          ]
+        }
+      }
+    },
+    "schemas": {
+      "Location": {
+        "type": "object",
+        "description": "Location metadata returned with every weather response.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Location name"
+          },
+          "region": {
+            "type": "string",
+            "description": "Region or state"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country name"
+          },
+          "lat": {
+            "type": "number",
+            "format": "float",
+            "description": "Latitude"
+          },
+          "lon": {
+            "type": "number",
+            "format": "float",
+            "description": "Longitude"
+          },
+          "tz_id": {
+            "type": "string",
+            "description": "IANA timezone ID, e.g. Europe/London"
+          },
+          "localtime_epoch": {
+            "type": "integer",
+            "description": "Local time as Unix epoch"
+          },
+          "localtime": {
+            "type": "string",
+            "description": "Local date and time string"
+          }
+        }
+      },
+      "Condition": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Weather condition description"
+          },
+          "icon": {
+            "type": "string",
+            "description": "URL to condition icon"
+          },
+          "code": {
+            "type": "integer",
+            "description": "Condition code (see conditions.json)"
+          }
+        }
+      },
+      "AirQuality": {
+        "type": "object",
+        "description": "Air quality data. Returned when aqi=yes.",
+        "properties": {
+          "co": {
+            "type": "number",
+            "description": "Carbon monoxide µg/m³"
+          },
+          "o3": {
+            "type": "number",
+            "description": "Ozone µg/m³"
+          },
+          "no2": {
+            "type": "number",
+            "description": "Nitrogen dioxide µg/m³"
+          },
+          "so2": {
+            "type": "number",
+            "description": "Sulphur dioxide µg/m³"
+          },
+          "pm2_5": {
+            "type": "number",
+            "description": "PM2.5 µg/m³"
+          },
+          "pm10": {
+            "type": "number",
+            "description": "PM10 µg/m³"
+          },
+          "us-epa-index": {
+            "type": "integer",
+            "description": "US EPA index 1–6 (1=Good, 6=Hazardous)"
+          },
+          "gb-defra-index": {
+            "type": "integer",
+            "description": "UK DEFRA index 1–10"
+          }
+        }
+      },
+      "Pollen": {
+        "type": "object",
+        "description": "Pollen data in grains/m³. Returned when pollen=yes (Pro+ and above).",
+        "properties": {
+          "Hazel": {
+            "type": "number"
+          },
+          "Alder": {
+            "type": "number"
+          },
+          "Birch": {
+            "type": "number"
+          },
+          "Oak": {
+            "type": "number"
+          },
+          "Grass": {
+            "type": "number"
+          },
+          "Mugwort": {
+            "type": "number"
+          },
+          "Ragweed": {
+            "type": "number"
+          }
+        }
+      },
+      "CurrentWeather": {
+        "type": "object",
+        "properties": {
+          "last_updated_epoch": {
+            "type": "integer"
+          },
+          "last_updated": {
+            "type": "string"
+          },
+          "temp_c": {
+            "type": "number",
+            "description": "Temperature °C"
+          },
+          "temp_f": {
+            "type": "number",
+            "description": "Temperature °F"
+          },
+          "is_day": {
+            "type": "integer",
+            "description": "1=day, 0=night"
+          },
+          "condition": {
+            "$ref": "#/components/schemas/Condition"
+          },
+          "wind_mph": {
+            "type": "number"
+          },
+          "wind_kph": {
+            "type": "number"
+          },
+          "wind_degree": {
+            "type": "integer"
+          },
+          "wind_dir": {
+            "type": "string",
+            "description": "16-point compass direction"
+          },
+          "pressure_mb": {
+            "type": "number"
+          },
+          "pressure_in": {
+            "type": "number"
+          },
+          "precip_mm": {
+            "type": "number"
+          },
+          "precip_in": {
+            "type": "number"
+          },
+          "humidity": {
+            "type": "integer",
+            "description": "Humidity %"
+          },
+          "cloud": {
+            "type": "integer",
+            "description": "Cloud cover %"
+          },
+          "feelslike_c": {
+            "type": "number"
+          },
+          "feelslike_f": {
+            "type": "number"
+          },
+          "windchill_c": {
+            "type": "number"
+          },
+          "windchill_f": {
+            "type": "number"
+          },
+          "heatindex_c": {
+            "type": "number"
+          },
+          "heatindex_f": {
+            "type": "number"
+          },
+          "dewpoint_c": {
+            "type": "number"
+          },
+          "dewpoint_f": {
+            "type": "number"
+          },
+          "vis_km": {
+            "type": "number"
+          },
+          "vis_miles": {
+            "type": "number"
+          },
+          "uv": {
+            "type": "number",
+            "description": "UV Index"
+          },
+          "gust_mph": {
+            "type": "number"
+          },
+          "gust_kph": {
+            "type": "number"
+          },
+          "short_rad": {
+            "type": "number",
+            "description": "GHI W/m² (paid plans)"
+          },
+          "diff_rad": {
+            "type": "number",
+            "description": "DHI W/m² (paid plans)"
+          },
+          "air_quality": {
+            "$ref": "#/components/schemas/AirQuality"
+          },
+          "pollen": {
+            "$ref": "#/components/schemas/Pollen"
+          }
+        }
+      },
+      "CurrentWeatherResponse": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "current": {
+            "$ref": "#/components/schemas/CurrentWeather"
+          }
+        }
+      },
+      "AstroElement": {
+        "type": "object",
+        "properties": {
+          "sunrise": {
+            "type": "string"
+          },
+          "sunset": {
+            "type": "string"
+          },
+          "moonrise": {
+            "type": "string"
+          },
+          "moonset": {
+            "type": "string"
+          },
+          "moon_phase": {
+            "type": "string"
+          },
+          "moon_illumination": {
+            "type": "number"
+          },
+          "is_moon_up": {
+            "type": "integer"
+          },
+          "is_sun_up": {
+            "type": "integer"
+          }
+        }
+      },
+      "ForecastDay": {
+        "type": "object",
+        "properties": {
+          "maxtemp_c": {
+            "type": "number"
+          },
+          "maxtemp_f": {
+            "type": "number"
+          },
+          "mintemp_c": {
+            "type": "number"
+          },
+          "mintemp_f": {
+            "type": "number"
+          },
+          "avgtemp_c": {
+            "type": "number"
+          },
+          "avgtemp_f": {
+            "type": "number"
+          },
+          "maxwind_mph": {
+            "type": "number"
+          },
+          "maxwind_kph": {
+            "type": "number"
+          },
+          "totalprecip_mm": {
+            "type": "number"
+          },
+          "totalprecip_in": {
+            "type": "number"
+          },
+          "totalsnow_cm": {
+            "type": "number"
+          },
+          "avgvis_km": {
+            "type": "number"
+          },
+          "avgvis_miles": {
+            "type": "number"
+          },
+          "avghumidity": {
+            "type": "integer"
+          },
+          "daily_will_it_rain": {
+            "type": "integer"
+          },
+          "daily_chance_of_rain": {
+            "type": "integer"
+          },
+          "daily_will_it_snow": {
+            "type": "integer"
+          },
+          "daily_chance_of_snow": {
+            "type": "integer"
+          },
+          "condition": {
+            "$ref": "#/components/schemas/Condition"
+          },
+          "uv": {
+            "type": "number"
+          },
+          "air_quality": {
+            "$ref": "#/components/schemas/AirQuality"
+          }
+        }
+      },
+      "HourForecast": {
+        "type": "object",
+        "properties": {
+          "time_epoch": {
+            "type": "integer"
+          },
+          "time": {
+            "type": "string"
+          },
+          "temp_c": {
+            "type": "number"
+          },
+          "temp_f": {
+            "type": "number"
+          },
+          "is_day": {
+            "type": "integer"
+          },
+          "condition": {
+            "$ref": "#/components/schemas/Condition"
+          },
+          "wind_mph": {
+            "type": "number"
+          },
+          "wind_kph": {
+            "type": "number"
+          },
+          "wind_degree": {
+            "type": "integer"
+          },
+          "wind_dir": {
+            "type": "string"
+          },
+          "pressure_mb": {
+            "type": "number"
+          },
+          "pressure_in": {
+            "type": "number"
+          },
+          "precip_mm": {
+            "type": "number"
+          },
+          "precip_in": {
+            "type": "number"
+          },
+          "snow_cm": {
+            "type": "number"
+          },
+          "humidity": {
+            "type": "integer"
+          },
+          "cloud": {
+            "type": "integer"
+          },
+          "feelslike_c": {
+            "type": "number"
+          },
+          "feelslike_f": {
+            "type": "number"
+          },
+          "windchill_c": {
+            "type": "number"
+          },
+          "windchill_f": {
+            "type": "number"
+          },
+          "heatindex_c": {
+            "type": "number"
+          },
+          "heatindex_f": {
+            "type": "number"
+          },
+          "dewpoint_c": {
+            "type": "number"
+          },
+          "dewpoint_f": {
+            "type": "number"
+          },
+          "will_it_rain": {
+            "type": "integer"
+          },
+          "chance_of_rain": {
+            "type": "integer"
+          },
+          "will_it_snow": {
+            "type": "integer"
+          },
+          "chance_of_snow": {
+            "type": "integer"
+          },
+          "vis_km": {
+            "type": "number"
+          },
+          "vis_miles": {
+            "type": "number"
+          },
+          "gust_mph": {
+            "type": "number"
+          },
+          "gust_kph": {
+            "type": "number"
+          },
+          "uv": {
+            "type": "number"
+          },
+          "short_rad": {
+            "type": "number"
+          },
+          "diff_rad": {
+            "type": "number"
+          },
+          "et0": {
+            "type": "number",
+            "description": "Evapotranspiration (Business+)"
+          },
+          "air_quality": {
+            "$ref": "#/components/schemas/AirQuality"
+          },
+          "pollen": {
+            "$ref": "#/components/schemas/Pollen"
+          }
+        }
+      },
+      "ForecastDayEntry": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "date_epoch": {
+            "type": "integer"
+          },
+          "day": {
+            "$ref": "#/components/schemas/ForecastDay"
+          },
+          "astro": {
+            "$ref": "#/components/schemas/AstroElement"
+          },
+          "hour": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HourForecast"
+            }
+          }
+        }
+      },
+      "Alert": {
+        "type": "object",
+        "properties": {
+          "headline": {
+            "type": "string"
+          },
+          "msgtype": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "urgency": {
+            "type": "string"
+          },
+          "areas": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "certainty": {
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "effective": {
+            "type": "string"
+          },
+          "expires": {
+            "type": "string"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "instruction": {
+            "type": "string"
+          }
+        }
+      },
+      "ForecastWeatherResponse": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "current": {
+            "$ref": "#/components/schemas/CurrentWeather"
+          },
+          "forecast": {
+            "type": "object",
+            "properties": {
+              "forecastday": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ForecastDayEntry"
+                }
+              }
+            }
+          },
+          "alerts": {
+            "type": "object",
+            "properties": {
+              "alert": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Alert"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AlertsResponse": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "alerts": {
+            "type": "object",
+            "properties": {
+              "alert": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Alert"
+                }
+              }
+            }
+          }
+        }
+      },
+      "MarineHour": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HourForecast"
+          }
+        ],
+        "properties": {
+          "sig_ht_mt": {
+            "type": "number",
+            "description": "Significant wave height in metres"
+          },
+          "swell_ht_mt": {
+            "type": "number"
+          },
+          "swell_ht_ft": {
+            "type": "number"
+          },
+          "swell_dir": {
+            "type": "number"
+          },
+          "swell_dir_16_point": {
+            "type": "string"
+          },
+          "swell_period_secs": {
+            "type": "number"
+          },
+          "water_temp_c": {
+            "type": "number",
+            "description": "Water temp °C (Pro+ and above)"
+          },
+          "water_temp_f": {
+            "type": "number"
+          }
+        }
+      },
+      "Tide": {
+        "type": "object",
+        "properties": {
+          "tide_time": {
+            "type": "string"
+          },
+          "tide_height_mt": {
+            "type": "number"
+          },
+          "tide_type": {
+            "type": "string",
+            "enum": [
+              "High",
+              "Low"
+            ]
+          }
+        }
+      },
+      "MarineForecastDay": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "date_epoch": {
+            "type": "integer"
+          },
+          "day": {
+            "$ref": "#/components/schemas/ForecastDay"
+          },
+          "astro": {
+            "$ref": "#/components/schemas/AstroElement"
+          },
+          "tides": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tide": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tide"
+                  }
+                }
+              }
+            }
+          },
+          "hour": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MarineHour"
+            }
+          }
+        }
+      },
+      "MarineWeatherResponse": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "forecast": {
+            "type": "object",
+            "properties": {
+              "forecastday": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarineForecastDay"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SearchLocation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "url": {
+            "type": "string",
+            "description": "URL-safe location slug"
+          }
+        }
+      },
+      "IpLookupResponse": {
+        "type": "object",
+        "properties": {
+          "ip": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ipv4",
+              "ipv6"
+            ]
+          },
+          "continent_code": {
+            "type": "string"
+          },
+          "continent_name": {
+            "type": "string"
+          },
+          "country_code": {
+            "type": "string"
+          },
+          "country_name": {
+            "type": "string"
+          },
+          "is_eu": {
+            "type": "boolean"
+          },
+          "geoname_id": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "tz_id": {
+            "type": "string"
+          },
+          "localtime_epoch": {
+            "type": "integer"
+          },
+          "localtime": {
+            "type": "string"
+          }
+        }
+      },
+      "TimezoneResponse": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          }
+        }
+      },
+      "AstronomyResponse": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "astronomy": {
+            "type": "object",
+            "properties": {
+              "astro": {
+                "$ref": "#/components/schemas/AstroElement"
+              }
+            }
+          }
+        }
+      },
+      "SportEvent": {
+        "type": "object",
+        "properties": {
+          "stadium": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "tournament": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string",
+            "description": "Local start datetime yyyy-MM-dd HH:mm"
+          },
+          "match": {
+            "type": "string"
+          }
+        }
+      },
+      "SportsResponse": {
+        "type": "object",
+        "properties": {
+          "football": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SportEvent"
+            }
+          },
+          "cricket": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SportEvent"
+            }
+          },
+          "golf": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SportEvent"
+            }
+          }
+        }
+      },
+      "BulkLocation": {
+        "type": "object",
+        "required": [
+          "q"
+        ],
+        "properties": {
+          "q": {
+            "type": "string",
+            "description": "Location query (same formats as q parameter)"
+          },
+          "custom_id": {
+            "type": "string",
+            "description": "Optional identifier echoed back in response"
+          }
+        }
+      },
+      "BulkRequest": {
+        "type": "object",
+        "required": [
+          "locations"
+        ],
+        "properties": {
+          "locations": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "$ref": "#/components/schemas/BulkLocation"
+            }
+          }
+        }
+      },
+      "BulkResponse": {
+        "type": "object",
+        "properties": {
+          "bulk": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "type": "object",
+                  "properties": {
+                    "custom_id": {
+                      "type": "string"
+                    },
+                    "q": {
+                      "type": "string"
+                    },
+                    "location": {
+                      "$ref": "#/components/schemas/Location"
+                    },
+                    "current": {
+                      "$ref": "#/components/schemas/CurrentWeather"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "integer",
+                "description": "WeatherAPI error code"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "example": {
+          "error": {
+            "code": 1006,
+            "message": "No location found matching parameter 'q'"
+          }
+        }
+      },
+      "SolarSystem": {
+        "type": "object",
+        "description": "Settings used for the calculation, including any defaults applied.",
+        "properties": {
+          "capacity_kw": {
+            "type": "number",
+            "description": "Array (DC) size in kWp"
+          },
+          "tilt": {
+            "type": "number",
+            "description": "Panel tilt in degrees"
+          },
+          "azimuth": {
+            "type": "number",
+            "description": "Panel azimuth in degrees clockwise from north (180 = south)"
+          },
+          "tracking": {
+            "type": "string",
+            "enum": [
+              "fixed",
+              "single_axis",
+              "dual_axis"
+            ]
+          },
+          "module_type": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "premium",
+              "thin_film"
+            ]
+          },
+          "temp_coefficient": {
+            "type": "number",
+            "description": "Power temperature coefficient %/°C"
+          },
+          "losses": {
+            "type": "number",
+            "description": "System losses %"
+          },
+          "inverter_kw": {
+            "type": "number",
+            "description": "Inverter AC rating kW"
+          },
+          "inverter_eff": {
+            "type": "number",
+            "description": "Inverter efficiency %"
+          },
+          "albedo": {
+            "type": "number",
+            "description": "Ground reflectance 0-1"
+          }
+        }
+      },
+      "SolarDay": {
+        "type": "object",
+        "properties": {
+          "energy_kwh": {
+            "type": "number",
+            "description": "Total AC energy for the day kWh"
+          },
+          "energy_dc_kwh": {
+            "type": "number",
+            "description": "Total DC energy for the day kWh"
+          },
+          "peak_power_kw": {
+            "type": "number",
+            "description": "Highest AC power kW"
+          },
+          "peak_sun_hours": {
+            "type": "number",
+            "description": "Equivalent full-sun hours on the panel plane"
+          },
+          "performance_ratio": {
+            "type": "number",
+            "description": "Performance ratio %"
+          },
+          "ghi_kwh_m2": {
+            "type": "number",
+            "description": "Global horizontal irradiation kWh/m²"
+          },
+          "poa_kwh_m2": {
+            "type": "number",
+            "description": "Plane-of-array irradiation kWh/m²"
+          }
+        }
+      },
+      "SolarHour": {
+        "type": "object",
+        "properties": {
+          "time_epoch": {
+            "type": "integer",
+            "description": "Period end, unix time (UTC)"
+          },
+          "time": {
+            "type": "string",
+            "description": "Period end, local time yyyy-MM-dd HH:mm"
+          },
+          "period_hours": {
+            "type": "number",
+            "description": "Period length in hours (1 to day 5, 3 after)"
+          },
+          "ghi": {
+            "type": "number",
+            "description": "Global horizontal irradiance W/m²"
+          },
+          "dni": {
+            "type": "number",
+            "description": "Direct normal irradiance W/m²"
+          },
+          "dhi": {
+            "type": "number",
+            "description": "Diffuse horizontal irradiance W/m²"
+          },
+          "poa_global": {
+            "type": "number",
+            "description": "Total plane-of-array irradiance W/m²"
+          },
+          "poa_direct": {
+            "type": "number",
+            "description": "Direct plane-of-array irradiance W/m²"
+          },
+          "poa_diffuse": {
+            "type": "number",
+            "description": "Sky diffuse plane-of-array irradiance W/m²"
+          },
+          "poa_ground": {
+            "type": "number",
+            "description": "Ground-reflected plane-of-array irradiance W/m²"
+          },
+          "sun_elevation": {
+            "type": "number",
+            "description": "Sun elevation degrees"
+          },
+          "sun_azimuth": {
+            "type": "number",
+            "description": "Sun azimuth degrees from north"
+          },
+          "angle_of_incidence": {
+            "type": "number",
+            "description": "Angle of incidence on the panel degrees"
+          },
+          "temp_c": {
+            "type": "number",
+            "description": "Air temperature °C"
+          },
+          "wind_kph": {
+            "type": "number",
+            "description": "Wind speed kph"
+          },
+          "cell_temp_c": {
+            "type": "number",
+            "description": "Cell temperature °C"
+          },
+          "power_dc_kw": {
+            "type": "number",
+            "description": "Average DC power kW"
+          },
+          "power_ac_kw": {
+            "type": "number",
+            "description": "Average AC power kW"
+          },
+          "energy_kwh": {
+            "type": "number",
+            "description": "AC energy for the period kWh"
+          },
+          "clipped_kwh": {
+            "type": "number",
+            "description": "Energy lost to inverter clipping kWh"
+          },
+          "snow_cover": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ],
+            "description": "1 = panels likely covered by snow"
+          }
+        }
+      },
+      "SolarForecastDay": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "date_epoch": {
+            "type": "integer"
+          },
+          "day": {
+            "$ref": "#/components/schemas/SolarDay"
+          },
+          "hour": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SolarHour"
+            }
+          }
+        }
+      },
+      "SolarResponse": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "system": {
+            "$ref": "#/components/schemas/SolarSystem"
+          },
+          "forecast": {
+            "type": "object",
+            "properties": {
+              "forecastday": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SolarForecastDay"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request — invalid parameter or location not found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized — API key missing or invalid.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Forbidden — API key quota exceeded, disabled, or plan does not include this resource.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Official WeatherAPI.com Documentation",
+    "url": "https://www.weatherapi.com/docs/"
+  }
+}

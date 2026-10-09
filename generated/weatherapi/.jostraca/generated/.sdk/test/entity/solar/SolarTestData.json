@@ -1,0 +1,40 @@
+{
+  "existing": {
+    "solar": {
+      "SOLAR00": {
+        "forecast": {},
+        "location": {},
+        "system": {},
+        "id": "SOLAR00"
+      },
+      "SOLAR01": {
+        "forecast": {},
+        "location": {},
+        "system": {},
+        "id": "SOLAR01"
+      },
+      "SOLAR02": {
+        "forecast": {},
+        "location": {},
+        "system": {},
+        "id": "SOLAR02"
+      }
+    }
+  },
+  "new": {
+    "solar": {
+      "solar_ref01": {
+        "forecast": {},
+        "location": {},
+        "system": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /solar.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

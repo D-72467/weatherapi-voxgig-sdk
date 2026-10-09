@@ -1,0 +1,113 @@
+# Entity: current
+
+main: kit: entity: current: {
+
+  alias: field: {}
+
+  fields: {
+    current: {
+      h: "Current"
+      n: "current"
+      r: false
+      t: "`$OBJECT`"
+    }
+    location: {
+      h: "Location"
+      n: "location"
+      r: false
+      sh: "Location metadata returned with every weather response."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "current"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /current.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "no"
+                k: "query"
+                n: "aqi"
+                or: "aqi"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "current_field"
+                or: "current_fields"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "fr"
+                k: "query"
+                n: "lang"
+                or: "lang"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "no"
+                k: "query"
+                n: "pollen"
+                or: "pollen"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "London"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/current.json"
+          q: {
+            exist: [
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "current.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.current`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

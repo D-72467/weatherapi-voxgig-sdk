@@ -1,0 +1,88 @@
+{
+  "existing": {
+    "ipn": {
+      "IPN00": {
+        "city": "s96",
+        "continent_code": "s97",
+        "continent_name": "s98",
+        "country_code": "s99",
+        "country_name": "s9a",
+        "geoname_id": "GEONAME01",
+        "ip": "s9c",
+        "is_eu": false,
+        "lat": 158,
+        "localtime": "s9f",
+        "localtime_epoch": 160,
+        "lon": 161,
+        "region": "sa2",
+        "type": "sa3",
+        "tz_id": "TZ01",
+        "id": "IPN00"
+      },
+      "IPN01": {
+        "city": "s12c",
+        "continent_code": "s12d",
+        "continent_name": "s12e",
+        "country_code": "s12f",
+        "country_name": "s130",
+        "geoname_id": "GEONAME01",
+        "ip": "s132",
+        "is_eu": false,
+        "lat": 308,
+        "localtime": "s135",
+        "localtime_epoch": 310,
+        "lon": 311,
+        "region": "s138",
+        "type": "s139",
+        "tz_id": "TZ01",
+        "id": "IPN01"
+      },
+      "IPN02": {
+        "city": "s1c2",
+        "continent_code": "s1c3",
+        "continent_name": "s1c4",
+        "country_code": "s1c5",
+        "country_name": "s1c6",
+        "geoname_id": "GEONAME01",
+        "ip": "s1c8",
+        "is_eu": false,
+        "lat": 458,
+        "localtime": "s1cb",
+        "localtime_epoch": 460,
+        "lon": 461,
+        "region": "s1ce",
+        "type": "s1cf",
+        "tz_id": "TZ01",
+        "id": "IPN02"
+      }
+    }
+  },
+  "new": {
+    "ipn": {
+      "ipn_ref01": {
+        "city": "s258",
+        "continent_code": "s259",
+        "continent_name": "s25a",
+        "country_code": "s25b",
+        "country_name": "s25c",
+        "geoname_id": "GEONAME01",
+        "ip": "s25e",
+        "is_eu": false,
+        "lat": 608,
+        "localtime": "s261",
+        "localtime_epoch": 610,
+        "lon": 611,
+        "region": "s264",
+        "type": "s265",
+        "tz_id": "TZ01"
+      }
+    }
+  },
+  "requests": {
+    "GET /ip.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

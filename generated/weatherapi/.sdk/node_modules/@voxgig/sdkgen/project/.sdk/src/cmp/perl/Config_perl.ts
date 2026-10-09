@@ -1,0 +1,194 @@
+
+import {
+  Content,
+  File,
+  cmp,
+  configDefinition,
+  each,
+  resolveAuthIn,
+  resolveAuthName,
+  targetFeatures,
+} from '@voxgig/sdkgen'
+
+
+import {
+  Model,
+} from '@voxgig/apidef'
+
+
+const PLUGIN_ROOT = 'feature/secrets/plugins/'
+
+
+function pluginModule(path: string): string {
+  return String(path)
+    .replace(new RegExp('^' + PLUGIN_ROOT), '')
+    .replace(/\.pm$/, '')
+    .replace(/\//g, '::')
+}
+
+
+function pluginsByPath(feature: any): Record<string, Record<string, string[]>> {
+  const out: Record<string, Record<string, string[]>> = {}
+
+  each(feature, (f: any) => {
+    const bypath: Record<string, string[]> = {}
+
+    each(f.plugin, (plugin: any) => {
+      if (false === plugin.active || null == plugin.active) return
+
+      for (const [sym, one] of Object.entries(plugin.def?.perl || {})) {
+        const path = String(one)
+        ;(bypath[path] = bypath[path] || []).push(sym)
+      }
+    })
+
+    if (0 < Object.keys(bypath).length) {
+      out[f.name] = bypath
+    }
+  })
+
+  return out
+}
+
+
+// The config is emitted as a JSON heredoc parsed at load time by the
+// vendored struct utility (Voxgig::Struct::parse_json). This keeps
+// booleans/nulls faithful (Perl has no native boolean scalar) and yields
+// insertion-ordered maps - and stays N-feature-safe: any number of
+// features simply serialize into the "feature" block.
+const Config = cmp(async function Config(props: any) {
+  const ctx$ = props.ctx$
+  const target = props.target
+
+  const model: Model = ctx$.model
+
+  const { def: configDef } = configDefinition(model, target.name)
+
+  if (null != configDef.options && null != configDef.options.auth) {
+    const authIn = resolveAuthIn(model)
+    const authName = resolveAuthName(model)
+
+    if ('header' !== authIn) {
+      configDef.options.auth.in = authIn
+    }
+
+    if ('Authorization' !== authName) {
+      configDef.options.auth.name = authName
+    }
+  }
+
+  const configJson = JSON.stringify(configDef, null, 2)
+
+  const bypath = pluginsByPath(targetFeatures(model, target))
+  const features = Object.keys(bypath).sort()
+
+  const vendorInc = 0 === features.length ? '' : `
+# The vendored sekreto and plugin ports keep their UPSTREAM package layout,
+# so they resolve through @INC rather than a file-path require - the same
+# convention feature/secrets_feature.pm and t/omni.pm use. This BEGIN runs
+# before the 'use' lines below, which are compile-time.
+BEGIN {
+  unshift @INC,
+    "$__dir/feature/secrets/sekreto",
+    "$__dir/feature/secrets/plugin",
+    "$__dir/feature/secrets/plugins";
+}
+`
+
+  let pluginUse = ''
+  let pluginTable = ''
+
+  if (0 < features.length) {
+    const lines: string[] = []
+    for (const fname of features) {
+      for (const path of Object.keys(bypath[fname]).sort()) {
+        const syms = Array.from(new Set(bypath[fname][path])).sort()
+        lines.push(`use ${pluginModule(path)} qw(${syms.join(' ')});`)
+      }
+    }
+    pluginUse = '\n' + Array.from(new Set(lines)).join('\n') + '\n'
+
+    const entries = features.map((fname) => {
+      const syms = Array.from(new Set(
+        Object.values(bypath[fname]).reduce(
+          (a: string[], b: string[]) => a.concat(b), []))).sort()
+      return `  '${fname}' => [ ${syms.map((s) => s + '()').join(', ')} ],`
+    })
+
+    pluginTable = `
+# THE SDK'S PROVIDER VOCABULARY, from the model's active plugin groups.
+#
+# sekreto's core ships four built-in kinds (env, memory, dotenv, file) and
+# nothing else: a kind not passed in here is UNKNOWN to that Sekreto. So
+# this table is what decides which vault, cloud, SaaS or CLI providers a
+# chain in this SDK may name - and an inactive group is not merely
+# unimported, its module is not generated at all.
+our %FEATURE_PLUGINS = (
+${entries.join('\n')}
+);
+
+sub feature_plugins {
+  my ($name) = @_;
+  $name = '' unless defined $name;
+  my $list = $FEATURE_PLUGINS{$name};
+  return defined $list ? $list : [];
+}
+`
+  }
+
+  File({ name: 'config.pm' }, () => {
+
+    Content(`# ${model.const.Name} SDK configuration
+
+use strict;
+use warnings;
+
+use File::Basename ();
+use Cwd ();
+
+my $__dir;
+BEGIN { $__dir = File::Basename::dirname(Cwd::abs_path(__FILE__)) }
+${vendorInc}require(Cwd::abs_path("$__dir/lib/Voxgig/Struct.pm"));
+
+package ${model.const.Name}Config;
+${pluginUse}
+# GENERATED from the API model - do not edit by hand. Parsed fresh on
+# each call so callers can safely mutate their copy.
+my $CONFIG_JSON = <<'END_CONFIG_JSON';
+${configJson}
+END_CONFIG_JSON
+
+sub make_config {
+  return Voxgig::Struct::parse_json($CONFIG_JSON);
+}
+
+# SHARED CONFIG (sdkgen rung L2).
+#
+# The SDK reads the config on every request and never writes to it, so one
+# instance is shared by every client rather than rebuilt per client - the
+# difference between parsing the embedded JSON once and once per client.
+#
+# The returned structure is SHARED: treat it as read-only. Callers that need to
+# mutate should use make_config, which always parses a fresh copy.
+my $SHARED_CONFIG;
+
+sub shared_config {
+  $SHARED_CONFIG = make_config() unless defined $SHARED_CONFIG;
+  return $SHARED_CONFIG;
+}
+
+sub make_feature {
+  my ($name) = @_;
+  require(Cwd::abs_path("$__dir/features.pm"));
+  return ${model.const.Name}Features::make_feature($name);
+}
+${pluginTable}
+1;
+`)
+  })
+})
+
+
+export {
+  Config
+}

@@ -1,0 +1,36 @@
+{
+  "existing": {
+    "astronomy": {
+      "ASTRONOMY00": {
+        "astronomy": {},
+        "location": {},
+        "id": "ASTRONOMY00"
+      },
+      "ASTRONOMY01": {
+        "astronomy": {},
+        "location": {},
+        "id": "ASTRONOMY01"
+      },
+      "ASTRONOMY02": {
+        "astronomy": {},
+        "location": {},
+        "id": "ASTRONOMY02"
+      }
+    }
+  },
+  "new": {
+    "astronomy": {
+      "astronomy_ref01": {
+        "astronomy": {},
+        "location": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /astronomy.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

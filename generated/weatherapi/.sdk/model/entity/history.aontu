@@ -1,0 +1,191 @@
+# Entity: history
+
+main: kit: entity: history: {
+
+  alias: field: {}
+
+  fields: {
+    alerts: {
+      h: "Alerts"
+      n: "alerts"
+      r: false
+      t: "`$OBJECT`"
+    }
+    current: {
+      h: "Current"
+      n: "current"
+      r: false
+      t: "`$OBJECT`"
+    }
+    forecast: {
+      h: "Forecast"
+      n: "forecast"
+      r: false
+      t: "`$OBJECT`"
+    }
+    location: {
+      h: "Location"
+      n: "location"
+      r: false
+      sh: "Location metadata returned with every weather response."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "history"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /history.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "no"
+                k: "query"
+                n: "aqi"
+                or: "aqi"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "2023-01-01"
+                k: "query"
+                n: "dt"
+                or: "dt"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "end_dt"
+                or: "end_dt"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "et0"
+                or: "et0"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "hour"
+                or: "hour"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "fr"
+                k: "query"
+                n: "lang"
+                or: "lang"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "no"
+                k: "query"
+                n: "pollen"
+                or: "pollen"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "London"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "solar"
+                or: "solar"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "tp"
+                or: "tp"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: 1490227200
+                k: "query"
+                n: "unixdt"
+                or: "unixdt"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "unixend_dt"
+                or: "unixend_dt"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "wind100kph"
+                or: "wind100kph"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "wind100mph"
+                or: "wind100mph"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/history.json"
+          q: {
+            exist: [
+              "dt"
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "history.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

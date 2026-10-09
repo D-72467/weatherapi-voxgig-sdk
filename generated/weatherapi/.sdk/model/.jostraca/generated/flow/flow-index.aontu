@@ -1,0 +1,15 @@
+# Flows
+
+@"./BasicAlertFlow.aontu"
+@"./BasicAstronomyFlow.aontu"
+@"./BasicBulkFlow.aontu"
+@"./BasicCurrentFlow.aontu"
+@"./BasicForecastFlow.aontu"
+@"./BasicFutureFlow.aontu"
+@"./BasicHistoryFlow.aontu"
+@"./BasicIpnFlow.aontu"
+@"./BasicMarineFlow.aontu"
+@"./BasicSearchFlow.aontu"
+@"./BasicSolarFlow.aontu"
+@"./BasicSportFlow.aontu"
+@"./BasicTimezoneFlow.aontu"

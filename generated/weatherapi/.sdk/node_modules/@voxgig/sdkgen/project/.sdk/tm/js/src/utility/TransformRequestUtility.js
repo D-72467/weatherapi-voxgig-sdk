@@ -1,0 +1,99 @@
+
+const { callArgs } = require('./ParamUtility')
+
+function transformRequest(ctx) {
+  const spec = ctx.spec
+  const utility = ctx.utility
+  const point = ctx.point
+  const isfunc = utility.struct.isfunc
+  const transform = utility.struct.transform
+
+  if (spec) {
+    spec.step = 'reqform'
+  }
+
+  try {
+    const reqform = point.transform.req
+    const reqdata = isfunc(reqform) ? reqform(ctx) : transform({
+      reqdata: omit(ctx.reqdata, routedArgNames(ctx))
+    }, reqform)
+
+    return stripAction(reqdata)
+  }
+  catch (err) {
+    return utility.makeError(ctx, err)
+  }
+}
+
+
+// `$action` selects WHICH POINT of the op to use (see MakePointUtility). It
+// is the SDK's own discriminator, never an API field, so it must not survive
+// into the wire body. The GraphQL path already strips it where it builds its
+// input object; this is the same rule on the REST path, which had no such
+// step and sent it verbatim -- `{"$action":"merge", ...}` to GitHub's merge
+// endpoint. Harmless there, because GitHub ignores unknown keys; not
+// harmless against an API that validates its request bodies strictly.
+//
+// Only a top-level key of a plain object: a body may legitimately be an
+// array or a scalar, and neither can carry a selector.
+//
+// `__proto__` is assigned through Object.defineProperty, never `body[key] =`.
+// It is a legal JSON key and can be a real API field, but plain assignment
+// invokes the inherited setter: the key would vanish from the serialised
+// request and silently become the body's prototype instead. Same treatment
+// as StructUtility's condenseSet, for the same reason.
+
+function stripAction(reqdata) {
+  return omit(reqdata, ['$action'])
+}
+
+
+// A header, cookie or query argument travels where prepareHeaders or
+// prepareQuery sends it, so the body is built from the request data without
+// it, unless the point marks it as a field the body keeps.
+function routedArgNames(ctx) {
+  return callArgs(ctx, 'header').concat(callArgs(ctx, 'cookie'), callArgs(ctx, 'query'))
+    .map((arg) => arg.name)
+    .filter((name) => !fieldArg(ctx, name))
+}
+
+
+function fieldArg(ctx, name) {
+  return ['header', 'cookie', 'query'].some((kind) =>
+    (ctx.point?.args?.[kind] || []).some((arg) => name === arg?.name && true === arg?.field))
+}
+
+
+function omit(reqdata, names) {
+  if (null == reqdata || 'object' !== typeof reqdata || Array.isArray(reqdata)) {
+    return reqdata
+  }
+
+  if (!names.some((name) => Object.prototype.hasOwnProperty.call(reqdata, name))) {
+    return reqdata
+  }
+
+  const body = {}
+  for (const key of Object.keys(reqdata)) {
+    if (names.includes(key)) {
+      continue
+    }
+    if ('__proto__' === key) {
+      Object.defineProperty(body, key, {
+        value: reqdata[key],
+        enumerable: true,
+        writable: true,
+        configurable: true,
+      })
+    }
+    else {
+      body[key] = reqdata[key]
+    }
+  }
+
+  return body
+}
+
+module.exports = {
+  transformRequest
+}

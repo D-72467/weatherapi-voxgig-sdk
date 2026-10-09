@@ -1,0 +1,44 @@
+{
+  "existing": {
+    "future": {
+      "FUTURE00": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "FUTURE00"
+      },
+      "FUTURE01": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "FUTURE01"
+      },
+      "FUTURE02": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "FUTURE02"
+      }
+    }
+  },
+  "new": {
+    "future": {
+      "future_ref01": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /future.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,111 @@
+# Entity: future
+
+main: kit: entity: future: {
+
+  alias: field: {}
+
+  fields: {
+    alerts: {
+      h: "Alerts"
+      n: "alerts"
+      r: false
+      t: "`$OBJECT`"
+    }
+    current: {
+      h: "Current"
+      n: "current"
+      r: false
+      t: "`$OBJECT`"
+    }
+    forecast: {
+      h: "Forecast"
+      n: "forecast"
+      r: false
+      t: "`$OBJECT`"
+    }
+    location: {
+      h: "Location"
+      n: "location"
+      r: false
+      sh: "Location metadata returned with every weather response."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "future"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /future.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "2026-06-01"
+                k: "query"
+                n: "dt"
+                or: "dt"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "fr"
+                k: "query"
+                n: "lang"
+                or: "lang"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "London"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/future.json"
+          q: {
+            exist: [
+              "dt"
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "future.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

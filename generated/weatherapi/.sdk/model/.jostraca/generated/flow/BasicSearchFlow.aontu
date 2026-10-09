@@ -1,0 +1,22 @@
+# BasicSearchFlow
+
+main: kit: flow: BasicSearchFlow:
+{
+  entity: "search",
+  kind: "basic",
+  name: "BasicSearchFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "search_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSearchFlow"
+}

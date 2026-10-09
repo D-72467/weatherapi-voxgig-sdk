@@ -1,0 +1,94 @@
+# Generated from the API definition and overwritten on every build: do not
+# edit this file. Put customizations in the guide entry file, which includes
+# this one and overrides its defaults:
+#   guide.aontu
+
+guide: {
+  metrics: count: entity: 13
+  metrics: count: path: 12
+  metrics: count: method: 13
+
+  entity: alert: {
+    path: "/alerts.json": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: astronomy: {
+    path: "/astronomy.json": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.astronomy`")|top
+    }
+  }
+
+  entity: bulk: {
+    path: "/current.json": {
+      op: create: method: *POST
+      op: create: transform: res: *("`body.bulk`")|top
+    }
+  }
+
+  entity: current: {
+    path: "/current.json": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.current`")|top
+    }
+  }
+
+  entity: forecast: {
+    path: "/forecast.json": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.forecast`")|top
+    }
+  }
+
+  entity: future: {
+    path: "/future.json": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: history: {
+    path: "/history.json": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: ipn: {
+    path: "/ip.json": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: marine: {
+    path: "/marine.json": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: search: {
+    path: "/search.json": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: solar: {
+    path: "/solar.json": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: sport: {
+    path: "/sports.json": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: timezone: {
+    path: "/timezone.json": {
+      op: load: method: *GET
+      op: load: transform: res: *("`body.location`")|top
+    }
+  }
+
+}

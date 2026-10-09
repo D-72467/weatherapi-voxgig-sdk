@@ -1,0 +1,28 @@
+# BasicMarineFlow
+
+main: kit: flow: BasicMarineFlow:
+{
+  entity: "marine",
+  kind: "basic",
+  name: "BasicMarineFlow",
+  step: [
+    {
+      i: {
+        ref: "marine_ref01",
+        srcdatavar: "marine_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-marine_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicMarineFlow"
+}

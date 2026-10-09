@@ -1,0 +1,161 @@
+# Entity: solar
+
+main: kit: entity: solar: {
+
+  alias: field: {}
+
+  fields: {
+    forecast: {
+      h: "Forecast"
+      n: "forecast"
+      r: false
+      t: "`$OBJECT`"
+    }
+    location: {
+      h: "Location"
+      n: "location"
+      r: false
+      sh: "Location metadata returned with every weather response."
+      t: "`$OBJECT`"
+    }
+    system: {
+      h: "System"
+      n: "system"
+      r: false
+      sh: "Settings used for the calculation, including any defaults applied."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "solar"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /solar.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                k: "query"
+                n: "albedo"
+                or: "albedo"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                k: "query"
+                n: "azimuth"
+                or: "azimuth"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                ex: 4
+                k: "query"
+                n: "capacity_kw"
+                or: "capacity_kw"
+                r: true
+                t: "`$NUMBER`"
+              }
+              {
+                k: "query"
+                n: "day"
+                or: "days"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "inverter_eff"
+                or: "inverter_eff"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                k: "query"
+                n: "inverter_kw"
+                or: "inverter_kw"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "loss"
+                or: "losses"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                k: "query"
+                n: "module_type"
+                or: "module_type"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "London"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "tilt"
+                or: "tilt"
+                r: false
+                t: "`$NUMBER`"
+              }
+              {
+                k: "query"
+                n: "tracking"
+                or: "tracking"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/solar.json"
+          q: {
+            exist: [
+              "capacity_kw"
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "solar.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

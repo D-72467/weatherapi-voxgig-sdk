@@ -1,0 +1,36 @@
+{
+  "files": [
+    "SUMMARY.md"
+  ],
+  "config": ".sdk/doc/qa/vale.ini",
+  "routes": {},
+  "quoted": {
+    "SUMMARY.md": [
+      "> WeatherAPI.com provides real-time, forecast, historical, marine, future, solar PV energy, astronomy, air quality, pollen, sports, IP lookup, timezone, and geolocation data via a JSON/XML REST API. Trusted by 1M+ users worldwide. Average response time ~200ms.\n>\n> ## Authentication\n> All endpoints require an API key passed as the `key` query parameter.\n>\n> ## Base URL\n> `https://api.weatherapi.com/v1`\n>\n> ## Location Query (`q` parameter)\n> Accepts: city name, lat/lon decimal, US zip, UK postcode, Canada postal code, METAR code (`metar:EGLL`), IATA airport code (`iata:DXB`), IP lookup (`auto:ip`), IPv4/IPv6 address, or location ID (`id:2801268`).\n>\n> ## Plans\n> - **Free**: 100K calls/month, 3-day forecast, 1-day history\n> - **Starter**: $7/mo, 3M calls, 7-day forecast, 7-day history\n> - **Pro+**: $25/mo, 5M calls, 300-day future, 365-day history\n> - **Business**: $65/mo, 10M calls, evapotranspiration\n> - **Enterprise**: Custom, 15-min interval, pollen history, wind@100m, SLA",
+      "API key obtained from https://www.weatherapi.com/my/. Pass as `?key=YOUR_API_KEY` query parameter.",
+      "Astronomy data",
+      "Bulk weather results",
+      "Country name",
+      "Current weather data",
+      "Forecast weather data",
+      "Future weather data",
+      "Historical weather data",
+      "IP geolocation data",
+      "Latitude",
+      "List of matching locations",
+      "Local date and time string",
+      "Local time as Unix epoch",
+      "Location metadata returned with every weather response.",
+      "Longitude",
+      "Marine weather data",
+      "Production (HTTP)",
+      "Production (HTTPS)",
+      "Settings used for the calculation, including any defaults applied.",
+      "Solar PV energy forecast",
+      "Sports events",
+      "Timezone data",
+      "URL-safe location slug",
+      "Weather alerts"
+    ]
+  }
+}

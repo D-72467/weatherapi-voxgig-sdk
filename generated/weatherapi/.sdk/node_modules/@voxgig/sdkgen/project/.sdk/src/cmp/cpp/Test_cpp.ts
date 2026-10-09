@@ -1,0 +1,40 @@
+
+import type {
+  ModelEntity
+} from '@voxgig/apidef'
+
+import { cmp, each, Folder, entityCollection,
+  TestControl } from '@voxgig/sdkgen'
+
+
+import { TestEntity } from './TestEntity_cpp'
+import { TestDirect } from './TestDirect_cpp'
+import { TestClean } from './TestClean_cpp'
+import { ReadmeExamplesTest } from './ReadmeExamplesTest_cpp'
+
+
+const Test = cmp(function Test(props: any) {
+  const { model } = props.ctx$
+  const { target } = props
+
+  Folder({ name: 'test' }, () => {
+
+    // Write-once: a project's edited control file survives regeneration.
+    TestControl({ target, dir: 'test' })
+    const entity = each(entityCollection(model))
+      .filter((e: any) => false !== e.active)
+    each(entity, (entity: ModelEntity) => {
+      TestEntity({ target, entity })
+      TestDirect({ target, entity })
+    })
+    TestClean({ target })
+
+    // Validate the documented C++ examples in the READMEs are well-formed.
+    ReadmeExamplesTest({ target })
+  })
+})
+
+
+export {
+  Test
+}

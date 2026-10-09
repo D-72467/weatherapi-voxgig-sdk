@@ -1,0 +1,28 @@
+# BasicFutureFlow
+
+main: kit: flow: BasicFutureFlow:
+{
+  entity: "future",
+  kind: "basic",
+  name: "BasicFutureFlow",
+  step: [
+    {
+      i: {
+        ref: "future_ref01",
+        srcdatavar: "future_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-future_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicFutureFlow"
+}

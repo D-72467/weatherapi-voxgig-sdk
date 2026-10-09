@@ -1,0 +1,36 @@
+{
+  "existing": {
+    "current": {
+      "CURRENT00": {
+        "current": {},
+        "location": {},
+        "id": "CURRENT00"
+      },
+      "CURRENT01": {
+        "current": {},
+        "location": {},
+        "id": "CURRENT01"
+      },
+      "CURRENT02": {
+        "current": {},
+        "location": {},
+        "id": "CURRENT02"
+      }
+    }
+  },
+  "new": {
+    "current": {
+      "current_ref01": {
+        "current": {},
+        "location": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /current.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,159 @@
+# Entity: ipn
+
+main: kit: entity: ipn: {
+
+  alias: field: {}
+
+  fields: {
+    city: {
+      h: "City"
+      n: "city"
+      r: false
+      t: "`$STRING`"
+    }
+    continent_code: {
+      h: "Continent Code"
+      n: "continent_code"
+      r: false
+      t: "`$STRING`"
+    }
+    continent_name: {
+      h: "Continent Name"
+      n: "continent_name"
+      r: false
+      t: "`$STRING`"
+    }
+    country_code: {
+      h: "Country Code"
+      n: "country_code"
+      r: false
+      t: "`$STRING`"
+    }
+    country_name: {
+      h: "Country Name"
+      n: "country_name"
+      r: false
+      t: "`$STRING`"
+    }
+    geoname_id: {
+      h: "Geoname Id"
+      n: "geoname_id"
+      r: false
+      t: "`$STRING`"
+    }
+    ip: {
+      h: "Ip"
+      n: "ip"
+      r: false
+      t: "`$STRING`"
+    }
+    is_eu: {
+      h: "Is Eu"
+      n: "is_eu"
+      r: false
+      t: "`$BOOLEAN`"
+    }
+    lat: {
+      h: "Lat"
+      n: "lat"
+      r: false
+      t: "`$NUMBER`"
+    }
+    localtime: {
+      h: "Localtime"
+      n: "localtime"
+      r: false
+      t: "`$STRING`"
+    }
+    localtime_epoch: {
+      h: "Localtime Epoch"
+      n: "localtime_epoch"
+      r: false
+      t: "`$INTEGER`"
+    }
+    lon: {
+      h: "Lon"
+      n: "lon"
+      r: false
+      t: "`$NUMBER`"
+    }
+    region: {
+      h: "Region"
+      n: "region"
+      r: false
+      t: "`$STRING`"
+    }
+    type: {
+      h: "Type"
+      n: "type"
+      r: false
+      t: "`$STRING`"
+    }
+    tz_id: {
+      h: "Tz Id"
+      n: "tz_id"
+      r: false
+      t: "`$STRING`"
+    }
+  }
+
+  name: "ipn"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /ip.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "auto:ip"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/ip.json"
+          q: {
+            exist: [
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "ip.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

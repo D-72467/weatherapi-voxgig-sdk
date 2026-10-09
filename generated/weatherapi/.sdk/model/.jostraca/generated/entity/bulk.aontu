@@ -1,0 +1,91 @@
+# Entity: bulk
+
+main: kit: entity: bulk: {
+
+  alias: field: {}
+
+  fields: {
+    bulk: {
+      h: "Bulk"
+      n: "bulk"
+      r: false
+      t: "`$ARRAY`"
+    }
+    locations: {
+      h: "Locations"
+      n: "locations"
+      r: true
+      t: "`$ARRAY`"
+    }
+  }
+
+  name: "bulk"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "locations"
+          ]
+          co: {
+            id: "POST /current.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "no"
+                k: "query"
+                n: "aqi"
+                or: "aqi"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "POST"
+          o: "/current.json"
+          q: {
+            exist: [
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "current.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.bulk`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

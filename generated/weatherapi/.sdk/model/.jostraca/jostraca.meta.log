@@ -1,0 +1,356 @@
+{
+  "foldername": ".jostraca",
+  "filename": "jostraca.meta.log",
+  "last": 1791541330609,
+  "hlast": 2026100910221060,
+  "files": {
+    "entity/alert.aontu": {
+      "action": "write",
+      "path": "entity/alert.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330593,
+      "hwhen": 2026100910221059
+    },
+    "entity/astronomy.aontu": {
+      "action": "write",
+      "path": "entity/astronomy.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330595,
+      "hwhen": 2026100910221059
+    },
+    "entity/bulk.aontu": {
+      "action": "write",
+      "path": "entity/bulk.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330596,
+      "hwhen": 2026100910221059
+    },
+    "entity/current.aontu": {
+      "action": "write",
+      "path": "entity/current.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330596,
+      "hwhen": 2026100910221059
+    },
+    "entity/forecast.aontu": {
+      "action": "write",
+      "path": "entity/forecast.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330597,
+      "hwhen": 2026100910221059
+    },
+    "entity/future.aontu": {
+      "action": "write",
+      "path": "entity/future.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330597,
+      "hwhen": 2026100910221059
+    },
+    "entity/history.aontu": {
+      "action": "write",
+      "path": "entity/history.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330598,
+      "hwhen": 2026100910221059
+    },
+    "entity/ipn.aontu": {
+      "action": "write",
+      "path": "entity/ipn.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330598,
+      "hwhen": 2026100910221059
+    },
+    "entity/marine.aontu": {
+      "action": "write",
+      "path": "entity/marine.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330599,
+      "hwhen": 2026100910221059
+    },
+    "entity/search.aontu": {
+      "action": "write",
+      "path": "entity/search.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330599,
+      "hwhen": 2026100910221059
+    },
+    "entity/solar.aontu": {
+      "action": "write",
+      "path": "entity/solar.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330600,
+      "hwhen": 2026100910221060
+    },
+    "entity/sport.aontu": {
+      "action": "write",
+      "path": "entity/sport.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330600,
+      "hwhen": 2026100910221060
+    },
+    "entity/timezone.aontu": {
+      "action": "write",
+      "path": "entity/timezone.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330601,
+      "hwhen": 2026100910221060
+    },
+    "entity/entity-index.aontu": {
+      "action": "write",
+      "path": "entity/entity-index.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330601,
+      "hwhen": 2026100910221060
+    },
+    "api/api-info.aontu": {
+      "action": "write",
+      "path": "api/api-info.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330602,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicAlertFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicAlertFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330602,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicAstronomyFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicAstronomyFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330603,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicBulkFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicBulkFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330603,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicCurrentFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicCurrentFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330604,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicForecastFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicForecastFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330605,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicFutureFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicFutureFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330605,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicHistoryFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicHistoryFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330605,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicIpnFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicIpnFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330606,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicMarineFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicMarineFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330606,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicSearchFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicSearchFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330607,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicSolarFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicSolarFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330607,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicSportFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicSportFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330608,
+      "hwhen": 2026100910221060
+    },
+    "flow/BasicTimezoneFlow.aontu": {
+      "action": "write",
+      "path": "flow/BasicTimezoneFlow.aontu",
+      "exists": false,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330608,
+      "hwhen": 2026100910221060
+    },
+    "flow/flow-index.aontu": {
+      "action": "write",
+      "path": "flow/flow-index.aontu",
+      "exists": true,
+      "actions": [
+        "write"
+      ],
+      "protect": false,
+      "conflict": false,
+      "when": 1791541330609,
+      "hwhen": 2026100910221060
+    }
+  }
+}

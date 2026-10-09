@@ -1,0 +1,28 @@
+# BasicHistoryFlow
+
+main: kit: flow: BasicHistoryFlow:
+{
+  entity: "history",
+  kind: "basic",
+  name: "BasicHistoryFlow",
+  step: [
+    {
+      i: {
+        ref: "history_ref01",
+        srcdatavar: "history_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-history_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicHistoryFlow"
+}

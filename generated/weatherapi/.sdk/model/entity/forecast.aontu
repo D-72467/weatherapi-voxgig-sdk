@@ -1,0 +1,185 @@
+# Entity: forecast
+
+main: kit: entity: forecast: {
+
+  alias: field: {}
+
+  fields: {
+    alerts: {
+      h: "Alerts"
+      n: "alerts"
+      r: false
+      t: "`$OBJECT`"
+    }
+    current: {
+      h: "Current"
+      n: "current"
+      r: false
+      t: "`$OBJECT`"
+    }
+    forecast: {
+      h: "Forecast"
+      n: "forecast"
+      r: false
+      t: "`$OBJECT`"
+    }
+    location: {
+      h: "Location"
+      n: "location"
+      r: false
+      sh: "Location metadata returned with every weather response."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "forecast"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /forecast.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "no"
+                k: "query"
+                n: "alert"
+                or: "alerts"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "no"
+                k: "query"
+                n: "aqi"
+                or: "aqi"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: 3
+                k: "query"
+                n: "day"
+                or: "days"
+                r: true
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "day_field"
+                or: "day_fields"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "dt"
+                or: "dt"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "et0"
+                or: "et0"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "hour"
+                or: "hour"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                k: "query"
+                n: "hour_field"
+                or: "hour_fields"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "fr"
+                k: "query"
+                n: "lang"
+                or: "lang"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "no"
+                k: "query"
+                n: "pollen"
+                or: "pollen"
+                r: false
+                t: "`$STRING`"
+              }
+              {
+                ex: "London"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "query"
+                n: "tp"
+                or: "tp"
+                r: false
+                t: "`$INTEGER`"
+              }
+              {
+                ex: 1490227200
+                k: "query"
+                n: "unixdt"
+                or: "unixdt"
+                r: false
+                t: "`$INTEGER`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/forecast.json"
+          q: {
+            exist: [
+              "day"
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "forecast.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.forecast`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

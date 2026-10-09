@@ -1,0 +1,28 @@
+# BasicCurrentFlow
+
+main: kit: flow: BasicCurrentFlow:
+{
+  entity: "current",
+  kind: "basic",
+  name: "BasicCurrentFlow",
+  step: [
+    {
+      i: {
+        ref: "current_ref01",
+        srcdatavar: "current_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-current_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicCurrentFlow"
+}

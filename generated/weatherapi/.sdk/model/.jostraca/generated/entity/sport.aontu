@@ -1,0 +1,87 @@
+# Entity: sport
+
+main: kit: entity: sport: {
+
+  alias: field: {}
+
+  fields: {
+    cricket: {
+      h: "Cricket"
+      n: "cricket"
+      r: false
+      t: "`$ARRAY`"
+    }
+    football: {
+      h: "Football"
+      n: "football"
+      r: false
+      t: "`$ARRAY`"
+    }
+    golf: {
+      h: "Golf"
+      n: "golf"
+      r: false
+      t: "`$ARRAY`"
+    }
+  }
+
+  name: "sport"
+  op: {
+    list: {
+      name: "list"
+      points: [
+        {
+          co: {
+            id: "GET /sports.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "London"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/sports.json"
+          q: {
+            exist: [
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "sports.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

@@ -1,0 +1,112 @@
+
+import {
+  Content,
+  File,
+  cmp,
+  each,
+  omap,
+  packageName,
+  pkgDescription,
+  keywords,
+  repoInfo,
+  PUBLISHER,
+  PUBLISHER_URL,
+  packageVersion,
+  authorInfo,
+  targetFeatures, envName,
+  hasLiveScenarios,
+  npmScriptRm,
+  npmScriptEnv,
+  npmScriptTestSome,
+} from '@voxgig/sdkgen'
+
+
+import {
+  KIT,
+  Model,
+  getModelPath,
+  nom,
+} from '@voxgig/apidef'
+
+
+const Package = cmp(async function Package(props: any) {
+  const ctx$ = props.ctx$
+  const target = props.target
+
+  const model: Model = ctx$.model
+
+  // WHO WROTE THIS PACKAGE. Per target, falling back to the model-wide value
+  // and then to the publisher — so a manifest cannot go on naming Voxgig
+  // while the model names someone else, which is exactly what the hardcoded
+  // constant here did.
+  const author = authorInfo(model, target.name)
+
+  // Gated by applicability: a feature that does not apply to this
+  // target must not inject its deps into the generated manifest.
+  const feature = targetFeatures(model, target)
+
+  const only = (kind: string, deps: any) =>
+    omap(deps, ([k, v]: any) => [v.active && kind === v.kind ? k : undefined, v.version])
+
+  const deps =
+    each(feature, (feature: any) =>
+      omap(feature.deps?.[target.name], ([k, v]: any) =>
+        [v.active ? k : undefined, v]))
+
+      .reduce((a: any, deps: any) => (each(deps, (dep: any) =>
+        a[dep.kind][dep.key$] = dep.version), a),
+        {
+          prod: only('prod', target.deps),
+          peer: only('peer', target.deps),
+          dev: only('dev', target.deps),
+        })
+
+  const SdkName = nom(model, 'Name')
+  const { repoUrl, issuesUrl } = repoInfo(model)
+
+  const pkg = {
+    name: packageName(model, target.name),
+    version: packageVersion(model, target.name),
+    description: pkgDescription(model, target.name),
+    keywords: keywords(model),
+    homepage: `${repoUrl}#readme`,
+    repository: { type: 'git', url: `git+${repoUrl}.git` },
+    bugs: { url: issuesUrl },
+    main: `src/${SdkName}SDK.js`,
+    type: 'commonjs',
+
+    // What actually ships. Without `files`, `npm publish` packs the test
+    // suite and the build scaffolding too. The js target runs from `src`
+    // directly (no build step), so that and the docs are the whole package.
+    files: ['src', 'README.md', 'REFERENCE.md'],
+    scripts: {
+      ...(hasLiveScenarios(model) ? {
+        'test:live': 'node ' + npmScriptEnv(envName(model) + '_TEST_LIVE', 'TRUE') +
+          ' --test test/live.test.js',
+      } : {}),
+
+      'test': 'node --test "test/**/*.test.js"',
+      'test-some': npmScriptTestSome(['--experimental-test-isolation=none'], 'test/**/*.test.js'),
+      'test-utility': 'node --test "test/utility/*.test.js"',
+
+      "clean": npmScriptRm(['node_modules', 'yarn.lock', 'package-lock.json']),
+      "reset": "npm run clean && npm i && npm test",
+    },
+    author,
+
+    license: 'MIT',
+
+    dependencies: deps.prod,
+    peerDependencies: deps.peer,
+    devDependencies: deps.dev,
+  }
+
+  File({ name: 'package.json' }, () => {
+    Content(JSON.stringify(pkg, null, 2))
+  })
+})
+
+
+export {
+  Package
+}

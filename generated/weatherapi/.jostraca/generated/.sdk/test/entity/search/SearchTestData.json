@@ -1,0 +1,52 @@
+{
+  "existing": {
+    "search": {
+      "SEARCH00": {
+        "country": "s46",
+        "id": "SEARCH00",
+        "lat": 72,
+        "lon": 73,
+        "name": "s4a",
+        "region": "s4b",
+        "url": "s4c"
+      },
+      "SEARCH01": {
+        "country": "s8c",
+        "id": "SEARCH01",
+        "lat": 142,
+        "lon": 143,
+        "name": "s90",
+        "region": "s91",
+        "url": "s92"
+      },
+      "SEARCH02": {
+        "country": "sd2",
+        "id": "SEARCH02",
+        "lat": 212,
+        "lon": 213,
+        "name": "sd6",
+        "region": "sd7",
+        "url": "sd8"
+      }
+    }
+  },
+  "new": {
+    "search": {
+      "search_ref01": {
+        "country": "s118",
+        "lat": 282,
+        "lon": 283,
+        "name": "s11c",
+        "region": "s11d",
+        "url": "s11e"
+      }
+    }
+  },
+  "requests": {
+    "GET /search.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

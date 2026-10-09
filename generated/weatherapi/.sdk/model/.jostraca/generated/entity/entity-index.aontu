@@ -1,0 +1,15 @@
+# Entity Models
+
+@"./alert.aontu"
+@"./astronomy.aontu"
+@"./bulk.aontu"
+@"./current.aontu"
+@"./forecast.aontu"
+@"./future.aontu"
+@"./history.aontu"
+@"./ipn.aontu"
+@"./marine.aontu"
+@"./search.aontu"
+@"./solar.aontu"
+@"./sport.aontu"
+@"./timezone.aontu"

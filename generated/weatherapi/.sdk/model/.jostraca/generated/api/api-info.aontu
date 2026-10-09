@@ -1,0 +1,59 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      contact: {
+        name: "WeatherAPI.com Support"
+        url: "https://www.weatherapi.com/contact.aspx"
+      }
+      description: `WeatherAPI.com provides real-time, forecast, historical, marine, future, solar PV energy, astronomy, air quality, pollen, sports, IP lookup, timezone, and geolocation data via a JSON/XML REST API. Trusted by 1M+ users worldwide. Average response time ~200ms.
+
+## Authentication
+All endpoints require an API key passed as the \`key\` query parameter.
+
+## Base URL
+\`https://api.weatherapi.com/v1\`
+
+## Location Query (\`q\` parameter)
+Accepts: city name, lat/lon decimal, US zip, UK postcode, Canada postal code, METAR code (\`metar:EGLL\`), IATA airport code (\`iata:DXB\`), IP lookup (\`auto:ip\`), IPv4/IPv6 address, or location ID (\`id:2801268\`).
+
+## Plans
+- **Free**: 100K calls/month, 3-day forecast, 1-day history
+- **Starter**: $7/mo — 3M calls, 7-day forecast, 7-day history
+- **Pro+**: $25/mo — 5M calls, 300-day future, 365-day history
+- **Business**: $65/mo — 10M calls, evapotranspiration
+- **Enterprise**: Custom — 15-min interval, pollen history, wind@100m, SLA`
+      license: {
+        name: "Commercial / Non-Commercial"
+        url: "https://www.weatherapi.com/terms.aspx"
+      }
+      security: {
+        in: "query"
+        name: "key"
+        prefix: ""
+        scheme: "ApiKeyAuth"
+        type: "apiKey"
+      }
+      servers: [
+        {
+          description: "Production (HTTPS)"
+          url: "https://api.weatherapi.com/v1"
+        }
+        {
+          description: "Production (HTTP)"
+          url: "http://api.weatherapi.com/v1"
+        }
+      ]
+      summary: "WeatherAPI.com provides real-time, forecast, historical, marine, future, solar PV energy, astronomy, air quality, pollen, sports, IP lookup, timezone, and geolocation data via a JSON/XML REST API."
+      title: "WeatherAPI.com"
+      version: "1.0.3"
+      website: "https://www.weatherapi.com/docs/"
+      "x-logo": {
+        url: "https://cdn.weatherapi.com/v4/images/weatherapi_logo.png"
+      }
+    }
+  }
+}
+

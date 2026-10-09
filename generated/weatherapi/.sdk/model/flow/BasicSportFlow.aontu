@@ -1,0 +1,22 @@
+# BasicSportFlow
+
+main: kit: flow: BasicSportFlow:
+{
+  entity: "sport",
+  kind: "basic",
+  name: "BasicSportFlow",
+  step: [
+    {
+      o: "list",
+      v: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "sport_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSportFlow"
+}

@@ -1,0 +1,36 @@
+{
+  "existing": {
+    "bulk": {
+      "BULK00": {
+        "bulk": [],
+        "locations": [],
+        "id": "BULK00"
+      },
+      "BULK01": {
+        "bulk": [],
+        "locations": [],
+        "id": "BULK01"
+      },
+      "BULK02": {
+        "bulk": [],
+        "locations": [],
+        "id": "BULK02"
+      }
+    }
+  },
+  "new": {
+    "bulk": {
+      "bulk_ref01": {
+        "bulk": [],
+        "locations": []
+      }
+    }
+  },
+  "requests": {
+    "POST /current.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

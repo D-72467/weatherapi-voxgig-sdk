@@ -1,0 +1,44 @@
+{
+  "existing": {
+    "forecast": {
+      "FORECAST00": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "FORECAST00"
+      },
+      "FORECAST01": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "FORECAST01"
+      },
+      "FORECAST02": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {},
+        "id": "FORECAST02"
+      }
+    }
+  },
+  "new": {
+    "forecast": {
+      "forecast_ref01": {
+        "alerts": {},
+        "current": {},
+        "forecast": {},
+        "location": {}
+      }
+    }
+  },
+  "requests": {
+    "GET /forecast.json": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

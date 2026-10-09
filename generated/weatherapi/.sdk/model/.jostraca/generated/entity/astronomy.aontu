@@ -1,0 +1,91 @@
+# Entity: astronomy
+
+main: kit: entity: astronomy: {
+
+  alias: field: {}
+
+  fields: {
+    astronomy: {
+      h: "Astronomy"
+      n: "astronomy"
+      r: false
+      t: "`$OBJECT`"
+    }
+    location: {
+      h: "Location"
+      n: "location"
+      r: false
+      sh: "Location metadata returned with every weather response."
+      t: "`$OBJECT`"
+    }
+  }
+
+  name: "astronomy"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /astronomy.json"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "2026-03-20"
+                k: "query"
+                n: "dt"
+                or: "dt"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "YOUR_API_KEY"
+                k: "query"
+                n: "key"
+                or: "key"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                ex: "London"
+                k: "query"
+                n: "q"
+                or: "q"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/astronomy.json"
+          q: {
+            exist: [
+              "dt"
+              "key"
+              "q"
+            ]
+          }
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "astronomy.json"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body.astronomy`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}
