@@ -25,3 +25,7 @@ jobs:
         env:
           WEATHERAPI_APIKEY: ${{ secrets.WEATHERAPI_APIKEY }}
         run: node scripts/live-smoke.cjs
+      - name: Bounded live read-only endpoint validation
+        env:
+          WEATHERAPI_APIKEY: ${{ secrets.WEATHERAPI_APIKEY }}
+        run: node scripts/live-validation.cjs
